@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f3f1ec;
+  --bg-light: #f9f8f4;
+  --ink: #000000;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16.5px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.005em;
+}
+
+::selection { background: rgba(0, 0, 0, 0.12); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+/* ============ Poster slider (ported from reference) ============ */
+.lps { position: relative; width: 100%; background: var(--lps-bg); color: var(--lps-ink); height: var(--lps-track); }
+.lps .lps-stage { position: sticky; top: 0; width: 100%; height: 100vh; height: 100svh; overflow: hidden; isolation: isolate; }
+
+.lps .lps-slide { position: absolute; inset: 0; visibility: hidden; z-index: 1; }
+.lps .lps-slide.is-active { visibility: visible; z-index: 2; }
+.lps .lps-slide.is-entering { visibility: visible; z-index: 3; }
+.lps .lps-slide.is-leaving { visibility: visible; z-index: 2; }
+
+.lps .lps-bg { position: absolute; inset: 0; overflow: hidden; }
+.lps .lps-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 7s linear; }
+.lps .lps-slide.is-active .lps-bg-img { transform: scale(1); }
+.lps .lps-bg-dim { position: absolute; inset: 0; background: #000; opacity: var(--lps-dim); }
+
+.lps .lps-card-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; perspective: 1400px; pointer-events: none; }
+.lps .lps-card {
+  container-type: inline-size;
+  position: relative;
+  height: var(--lps-card-h);
+  aspect-ratio: 0.68;
+  max-width: 88vw;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(10px, 1.5vw, 22px);
+  border-radius: clamp(10px, 1vw, 16px);
+  background: var(--lps-card);
+  color: var(--lps-ink);
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.65);
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.lps .lps-card-media { position: relative; flex: 0 0 50%; overflow: hidden; border-radius: clamp(6px, 0.6vw, 10px); }
+.lps .lps-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lps .lps-heading {
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 6cqw;
+  font-family: "Archivo", "Arial Black", sans-serif;
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: 23cqw;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--lps-ink);
+}
+.lps .lps-heading span { display: block; }
+.lps .lps-foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.lps .lps-details { margin: 0; display: grid; gap: 2px; }
+.lps .lps-row { display: flex; gap: 6px; align-items: baseline; }
+.lps .lps-row dt, .lps .lps-row dd { margin: 0; font-family: "Archivo", Arial, sans-serif; font-size: max(10.5px, 4.1cqw); line-height: 1.35; color: var(--lps-ink); }
+.lps .lps-row dt { font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; }
+.lps .lps-row dd { font-weight: 500; }
+.lps .lps-icons { display: flex; gap: clamp(3px, 0.4vw, 6px); flex-shrink: 0; }
+.lps .lps-icons svg { width: 8.5cqw; height: auto; aspect-ratio: 1; display: block; }
+
+@media (max-width: 749px) {
+  .lps .lps-card { height: min(var(--lps-card-h), calc(74vw / 0.68)); }
+}
+
+/* Coverflow name fade */
+@keyframes nameFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.namefade { animation: nameFade 0.4s ease-out; }

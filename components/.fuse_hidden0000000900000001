@@ -1,0 +1,172 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+// posters shown whole (their own styling is baked in); ar = width / height
+const POSTERS = [
+  { img: "/ring/ring1.jpg", ar: 1.0, name: "Artificial Stones" },
+  { img: "/ring/ring2.jpg", ar: 1.0, name: "Granite" },
+  { img: "/ring/ring3.jpg", ar: 1.0, name: "Marble" },
+  { img: "/ring/ring4.jpg", ar: 0.78, name: "Limestone" },
+  { img: "/ring/ring5.jpg", ar: 0.87, name: "Quartzite" },
+  { img: "/ring/ring6.jpg", ar: 0.78, name: "Sandstone" },
+  { img: "/ring/ring7.jpg", ar: 0.67, name: "Onyx Marble" },
+  { img: "/ring/ring8.jpg", ar: 1.0, name: "Landscape" },
+  { img: "/ring/ring9.jpg", ar: 0.83, name: "Travertine" },
+  { img: "/ring/ring10.jpg", ar: 1.0, name: "Slate" },
+];
+const N = POSTERS.length;
+const STEPDEG = 360 / N;
+const clamp = (v: number, a: number, b: number) => Math.min(Math.max(v, a), b);
+
+export default function StoneRing() {
+  const ringRef = useRef<HTMLDivElement>(null);
+  const vpRef = useRef<HTMLDivElement>(null);
+  const [dim, setDim] = useState({ cardH: 420, radius: 756, persp: 1280 });
+
+  // rotation state kept in refs (no re-render per frame)
+  const angle = useRef(0);
+  const vel = useRef(0);
+  const dragging = useRef(false);
+  const lastX = useRef(0);
+  const lastFront = useRef(0);
+  const [frontIdx, setFrontIdx] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const cardH = clamp(Math.round(Math.min(vh * 0.5, vw * 0.72)), 220, 460);
+      const radius = Math.round(cardH * 1.85);
+      const persp = Math.round(radius * 1.7);
+      setDim({ cardH, radius, persp });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      if (!dragging.current) {
+        angle.current += 0.05 + vel.current; // slow auto-spin + momentum
+        vel.current *= 0.93;
+      }
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translateZ(${-dim.radius}px) rotateY(${angle.current}deg)`;
+      }
+      // which poster is facing front — update name only when it changes
+      const fi = ((Math.round(-angle.current / STEPDEG) % N) + N) % N;
+      if (fi !== lastFront.current) {
+        lastFront.current = fi;
+        setFrontIdx(fi);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [dim.radius]);
+
+  // drag to spin
+  useEffect(() => {
+    const vp = vpRef.current;
+    if (!vp) return;
+    const down = (e: PointerEvent) => {
+      dragging.current = true;
+      lastX.current = e.clientX;
+      vel.current = 0;
+      vp.setPointerCapture(e.pointerId);
+    };
+    const move = (e: PointerEvent) => {
+      if (!dragging.current) return;
+      const dx = e.clientX - lastX.current;
+      lastX.current = e.clientX;
+      const da = dx * 0.28;
+      angle.current += da;
+      vel.current = da;
+    };
+    const up = (e: PointerEvent) => {
+      dragging.current = false;
+      try { vp.releasePointerCapture(e.pointerId); } catch {}
+    };
+    vp.addEventListener("pointerdown", down);
+    vp.addEventListener("pointermove", move);
+    vp.addEventListener("pointerup", up);
+    vp.addEventListener("pointercancel", up);
+    return () => {
+      vp.removeEventListener("pointerdown", down);
+      vp.removeEventListener("pointermove", move);
+      vp.removeEventListener("pointerup", up);
+      vp.removeEventListener("pointercancel", up);
+    };
+  }, []);
+
+  return (
+    <section className="relative w-full overflow-hidden py-16 sm:py-24">
+      {/* heading */}
+      <div className="relative z-20 mb-6 px-5 text-center sm:mb-10">
+        <span className="label">The Showroom</span>
+        <h2
+          className="mt-3 text-[clamp(2rem,5.5vw,3.8rem)] font-extrabold uppercase leading-[0.98] tracking-[-0.025em] text-black"
+          style={{ fontFamily: '"Archivo", sans-serif' }}
+        >
+          A world carved in stone
+        </h2>
+      </div>
+
+      {/* 3D ring */}
+      <div
+        ref={vpRef}
+        className="relative mx-auto cursor-grab select-none active:cursor-grabbing"
+        style={{
+          height: dim.cardH * 1.18,
+          perspective: `${dim.persp}px`,
+          touchAction: "pan-y",
+        }}
+      >
+        {/* edge fades */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[14%] bg-gradient-to-r from-[#f3f1ec] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-[14%] bg-gradient-to-l from-[#f3f1ec] to-transparent" />
+
+        <div
+          ref={ringRef}
+          className="absolute left-1/2 top-1/2"
+          style={{ transformStyle: "preserve-3d", transform: `translateZ(${-dim.radius}px)` }}
+        >
+          {POSTERS.map((p, i) => (
+            <div
+              key={p.img}
+              className="absolute left-0 top-0"
+              style={{
+                width: dim.cardH * p.ar,
+                height: dim.cardH,
+                marginLeft: -(dim.cardH * p.ar) / 2,
+                marginTop: -dim.cardH / 2,
+                transform: `rotateY(${i * STEPDEG}deg) translateZ(${dim.radius}px)`,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+              }}
+            >
+              <div className="h-full w-full overflow-hidden rounded-[20px] shadow-[0_45px_90px_-35px_rgba(0,0,0,0.55)] ring-1 ring-black/10">
+                <img src={p.img} alt={p.name} className="h-full w-full object-cover" draggable={false} loading="lazy" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* current stone name (auto-updates as it spins) */}
+      <div className="relative z-20 mt-6 text-center sm:mt-9">
+        <span
+          key={frontIdx}
+          className="namefade block text-[clamp(1.25rem,2.6vw,1.9rem)] font-semibold tracking-[-0.01em] text-black"
+          style={{ fontFamily: "Montserrat, sans-serif" }}
+        >
+          {POSTERS[frontIdx].name}
+        </span>
+        <span className="label mt-3 inline-block">Drag to explore &middot; {N} signature surfaces</span>
+      </div>
+    </section>
+  );
+}

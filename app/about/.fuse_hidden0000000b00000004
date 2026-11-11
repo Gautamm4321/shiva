@@ -1,0 +1,262 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About — Shiva Granite",
+  description:
+    "Shiva Granite & Marble Company — merchant exporters of rare and exotic natural stone from India.",
+};
+
+const display = {
+  fontFamily: '"Archivo", "Arial", sans-serif',
+  fontStretch: "82%",
+  fontWeight: 800,
+  letterSpacing: "-0.03em",
+  lineHeight: 0.95,
+  color: "#000",
+} as React.CSSProperties;
+
+const serifless = { fontFamily: '"Montserrat", sans-serif', color: "#000" } as React.CSSProperties;
+
+const pillars = [
+  {
+    title: "Material",
+    body: "Manufacturing and production of high quality material.",
+    icon: (
+      <path
+        d="M4 9 L16 3 L28 9 L28 23 L16 29 L4 23 Z M4 9 L16 15 L28 9 M16 15 L16 29"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+    ),
+  },
+  {
+    title: "Delivery",
+    body: "Serving our clients with on-time delivery of the products.",
+    icon: (
+      <path
+        d="M2 8 H19 V21 H2 Z M19 12 H26 L30 16 V21 H19 Z M8 25 a2.4 2.4 0 1 0 0.01 0 Z M24 25 a2.4 2.4 0 1 0 0.01 0 Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+    ),
+  },
+  {
+    title: "Relationship",
+    body: "Building a long term relationship with our valued clients.",
+    icon: (
+      <path
+        d="M16 27 C7 21 3 16 3 11 A5.5 5.5 0 0 1 16 8 A5.5 5.5 0 0 1 29 11 C29 16 25 21 16 27 Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+    ),
+  },
+];
+
+const inspiration = [
+  {
+    no: "01",
+    title: "Our Mission",
+    body: "To become a globally renowned company with a market presence among the architects and real estate developers who share a passion for natural stones like granite, marble and etc.",
+  },
+  {
+    no: "02",
+    title: "Our Vision",
+    body: "To provide rare and exotic natural stone and make them available for our customers at competitive prices which would make there dream home's flooring visually appealing and durable across generations.",
+  },
+  {
+    no: "03",
+    title: "Our Values",
+    body: "We strive to derive customer satisfaction at each step. We work with a clear conscience and high commitment levels and always strive to build relationships rather then one time customers.",
+  },
+];
+
+export default function AboutPage() {
+  return (
+    <main className="w-full overflow-hidden text-black">
+      {/* ===== Who We Are ===== */}
+      <section className="flex min-h-[100svh] items-center pt-[72px]">
+        <div className="mx-auto grid w-[min(1280px,92vw)] items-center gap-10 py-10 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+          <div>
+            <span className="label">About Shiva Granite</span>
+            <h1 className="mt-5 mb-8 text-[clamp(2.7rem,6vw,4.8rem)]" style={display}>
+              Who We Are
+            </h1>
+            <div className="max-w-[48ch] space-y-6 text-[1.1rem] leading-[1.7] text-black" style={{ fontFamily: '"Inter", sans-serif' }}>
+              <p>
+                Shiva Granite &amp; Marble Company, formally known as Inter Granite Marble
+                Company currently base in Thailand (Bangkok). We started our journey as an
+                Importer / Distributor from Thailand.
+              </p>
+              <p>
+                At present we are doing business as a Merchant Exporters from India. We have
+                our own set up and team in India.
+              </p>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="overflow-hidden rounded-[18px] shadow-[0_40px_90px_-40px_rgba(0,0,0,0.5)]">
+              <img
+                src="/foraboutimg1.jpeg"
+                alt="Curated natural stone slabs and interior styling"
+                className="h-[clamp(360px,64vh,580px)] w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== The Inspiration ===== */}
+      <section className="mx-auto w-[min(1280px,92vw)] py-16 sm:py-24">
+        <header className="mb-14 text-center">
+          <h2 className="text-[clamp(2.1rem,5vw,3.6rem)]" style={display}>
+            The Inspiration
+          </h2>
+        </header>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {inspiration.map((c) => (
+            <article
+              key={c.title}
+              className="group flex flex-col rounded-[16px] bg-white/70 p-8 shadow-[0_24px_50px_-40px_rgba(0,0,0,0.5)] transition-all duration-500 hover:-translate-y-1.5 hover:bg-white hover:shadow-[0_40px_80px_-45px_rgba(0,0,0,0.55)]"
+            >
+              <span
+                className="text-[0.95rem] tracking-[0.28em] text-black"
+                style={{ fontFamily: '"IBM Plex Mono", monospace' }}
+              >
+                {c.no}
+              </span>
+              <h3 className="mt-5 text-[1.55rem] font-semibold tracking-[-0.01em]" style={serifless}>
+                {c.title}
+              </h3>
+              <p className="mt-5 text-[1.02rem] leading-[1.7] text-black" style={{ fontFamily: '"Inter", sans-serif' }}>
+                {c.body}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== Stone band ===== */}
+      <section className="mx-auto w-[min(1280px,92vw)] py-12 sm:py-16">
+        <div className="overflow-hidden rounded-[18px] shadow-[0_40px_90px_-45px_rgba(0,0,0,0.5)]">
+          <img
+            src="/foraboutimg8.jpeg"
+            alt="A dramatic black marble slab"
+            className="h-[clamp(260px,38vw,520px)] w-full object-cover"
+          />
+        </div>
+      </section>
+
+      {/* ===== Quality & Service ===== */}
+      <section className="mx-auto w-[min(1280px,92vw)] py-16 sm:py-24">
+        <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1fr] lg:gap-16">
+          <div className="order-2 overflow-hidden rounded-[18px] shadow-[0_40px_90px_-40px_rgba(0,0,0,0.5)] lg:order-1">
+            <img
+              src="/foraboutimg2.jpeg"
+              alt="Hand-worked marble blocks and stonemason's tools"
+              className="aspect-[4/5] w-full object-cover"
+            />
+          </div>
+          <div className="order-1 lg:order-2">
+            <h2 className="mb-8 text-[clamp(2.1rem,5vw,3.6rem)]" style={display}>
+              Quality &amp; Service
+            </h2>
+            <div className="max-w-[56ch] space-y-6 text-[1.06rem] leading-[1.75] text-black" style={{ fontFamily: '"Inter", sans-serif' }}>
+              <p>
+                Our Quality &amp; Service standards helped us in achieving our clients&rsquo;
+                trust &amp; confidence. Since then, we progressed rapidly to set up &amp;
+                alliance with multiple Granite &amp; Marble Cutting and Processing Factories.
+              </p>
+              <p>
+                Our Quality &amp; Service led us to achieve our clients&rsquo; long lasting
+                relation and trust. Since then, we have rapidly set up alliance with multiple
+                marble cutting / processing factories — at all MAJOR locations in India.
+              </p>
+              <p>
+                With multiple factories locations, strong quarry alliances, offices in a
+                strategic location, today we have established ourselves as one of the most
+                reliable &amp; highly client-centric company — with an un-paralleled edge on
+                knowledge &amp; ability to source, process &amp; supply Granite and Marble from
+                India.
+              </p>
+              <p>
+                The group comprises of several entities catering to Quarrying / Gangsaw Slabs
+                Processing / Cutter Slabs processing / Exports.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Competitive Price ===== */}
+      <section className="mx-auto w-[min(1280px,92vw)] py-16 sm:py-24">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
+          <div>
+            <h2 className="mb-8 text-[clamp(2.1rem,5vw,3.6rem)]" style={display}>
+              Competitive Price
+            </h2>
+            <div className="max-w-[56ch] space-y-6 text-[1.06rem] leading-[1.75] text-black" style={{ fontFamily: '"Inter", sans-serif' }}>
+              <p>
+                We soon gained expertise in sourcing of quality Granite, marble, slabs &amp;
+                tiles from primarily Southern &amp; Northern parts of India. Thereafter, we
+                forayed into procurement of Granite &amp; marble blocks directly from quarries
+                &amp; took up &lsquo;jobbing&rsquo; at a several location.
+              </p>
+              <p>
+                Our alliance with strategically located factories near quarries helped us in
+                providing quality material at a lower price — which helped us to form a better
+                vision of our company.
+              </p>
+            </div>
+          </div>
+          <div className="overflow-hidden rounded-[18px] shadow-[0_40px_90px_-40px_rgba(0,0,0,0.5)]">
+            <img
+              src="/foraboutimg3.jpeg"
+              alt="Premium dark marble and granite blocks"
+              className="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Interior feature ===== */}
+      <section className="mx-auto w-[min(1280px,92vw)] py-12 sm:py-16">
+        <div className="mx-auto max-w-[880px] overflow-hidden rounded-[18px] shadow-[0_40px_90px_-45px_rgba(0,0,0,0.5)]">
+          <img
+            src="/foraboutimt7.jpeg"
+            alt="Finished marble tables in a refined interior"
+            className="aspect-[4/3] w-full object-cover"
+          />
+        </div>
+      </section>
+
+      {/* ===== Pillars ===== */}
+      <section className="mx-auto w-[min(1180px,92vw)] py-16 sm:py-24">
+        <div className="grid gap-12 text-center sm:grid-cols-3 sm:gap-8">
+          {pillars.map((p) => (
+            <div key={p.title} className="flex flex-col items-center">
+              <svg width="40" height="40" viewBox="0 0 32 32" className="text-black">
+                {p.icon}
+              </svg>
+              <h3 className="mt-6 text-[1.25rem] font-semibold tracking-[-0.01em]" style={serifless}>
+                {p.title}
+              </h3>
+              <p className="mt-3 max-w-[27ch] text-[1.02rem] leading-[1.6] text-black" style={{ fontFamily: '"Inter", sans-serif' }}>
+                {p.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </main>
+  );
+}

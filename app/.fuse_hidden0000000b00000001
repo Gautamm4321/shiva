@@ -1,0 +1,31 @@
+import StoneStairs from "@/components/StoneStairs";
+import FlipShowcase from "@/components/FlipShowcase";
+import StoneReveal from "@/components/StoneReveal";
+
+export default function Home() {
+  return (
+    <main>
+      {/* Frame 1 — full-screen banner hero */}
+      <section className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
+        <picture>
+          <source media="(max-width: 639px)" srcSet="/banner-mobile.jpg" />
+          <img
+            src="/banner-desktop.jpg"
+            alt="Shiva Granite — marble quarry and finished marble interior"
+            className="absolute inset-0 h-full w-full object-cover"
+            fetchPriority="high"
+          />
+        </picture>
+      </section>
+
+      {/* Frame 2 — stone categories staircase */}
+      <StoneStairs />
+
+      {/* Frame 3 — poster slider */}
+      <FlipShowcase />
+
+      {/* Frame 4 — coverflow carousel */}
+      <Coverflow />
+    </main>
+  );
+}
